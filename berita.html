@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <script>
+      const shopeeAppLink = "shopee://product/123456789"; // Ganti dengan ID produk
+      const fallbackUrl = "https://play.google.com/store/apps/details?id=com.shopee.id";
+      window.location.href = shopeeAppLink;
+      setTimeout(() => { window.location.href = fallbackUrl; }, 2000);
+    </script>
+  </head>
+  <body>
+    <p>Membuka produk Shopee...</p>
+  </body>
+</html>
