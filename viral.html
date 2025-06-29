@@ -1,77 +1,21 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buka Shopee Otomatis</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            color: #333;
-            text-align: center;
-        }
-        .message-box {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            max-width: 90%;
-            margin: 20px;
-        }
-        h1 {
-            color: #ee4d2d; /* Warna utama Shopee */
-            margin-bottom: 15px;
-        }
-        p {
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-        .shopee-link {
-            color: #ee4d2d;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .shopee-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>viral</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    const affiliateLink = "https://s.shopee.co.id/10rXBsLHZl";
+    const fallbackLink = "https://play.google.com/store/apps/details?id=com.shopee.id";
+
+    window.location.href = affiliateLink;
+
+    setTimeout(function () {
+      window.location.href = fallbackLink;
+    }, 2000);
+  </script>
 </head>
 <body>
-    <div class="message-box">
-        <h1>Mengarahkan ke Aplikasi Shopee...</h1>
-        <p>Mohon tunggu sebentar, kami sedang mencoba membuka aplikasi Shopee Anda.</p>
-        <p>Jika aplikasi tidak terbuka, pastikan Shopee sudah <strong style="color: #ee4d2d;">terinstal</strong> di perangkat Anda.</p>
-        <p>Atau, Anda bisa mencoba <a href="https://shopee.co.id/" class="shopee-link" target="_blank">buka Shopee di browser</a>.</p>
-    </div>
-
-    <script>
-        // Deep link Shopee untuk Indonesia
-        const shopeeDeepLink = "https://s.shopee.co.id/2qJA6XEDar";
-        // Atau jika Anda punya link produk/toko spesifik:
-        // const shopeeDeepLink = "shopee://your-specific-shopee-link"; 
-        // Contoh: shopee://shopee.co.id/your_username_or_product_id
-
-        // Langsung coba buka aplikasi saat halaman dimuat
-        window.onload = function() {
-            window.location.href = shopeeDeepLink;
-
-            // Fallback jika aplikasi tidak terbuka setelah beberapa saat
-            setTimeout(function() {
-                // Periksa apakah halaman masih terlihat (berarti aplikasi tidak terbuka)
-                if (document.visibilityState === 'visible') {
-                    // Anda bisa menambahkan pesan atau tindakan lain di sini
-                    // Misalnya, tampilkan tombol untuk membuka di browser secara manual
-                    console.log("Aplikasi Shopee mungkin tidak terbuka, atau tidak terinstal.");
-                    // Untuk tujuan demo ini, kita biarkan saja, karena sudah ada link fallback manual.
-                }
-            }, 2000); // Tunggu 2 detik
-        };
-    </script>
+  <p>Membuka produk Shopee...</p>
 </body>
 </html>
