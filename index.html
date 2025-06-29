@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <script>
+      // Ganti dengan skema produk Shopee kamu
+      const shopeeAppLink = "shopee://open?id=123456789"; // contoh placeholder
+
+      const fallbackUrl = "https://play.google.com/store/apps/details?id=com.shopee.id";
+
+      // Coba buka app Shopee
+      window.location.href = shopeeAppLink;
+
+      // Kalau tidak berhasil (app tidak terinstal), arahkan ke Play Store
+      setTimeout(function () {
+        window.location.href = fallbackUrl;
+      }, 2000);
+    </script>
+  </head>
+  <body>
+    <p>Mengarahkan ke aplikasi Shopee...</p>
+  </body>
+</html>
