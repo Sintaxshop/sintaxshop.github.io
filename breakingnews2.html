@@ -27,8 +27,14 @@
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+    // Gunakan link affiliate asli
     const affiliateLink = 'https://s.shopee.co.id/10rXBsLHZl';
-    const chromeIntent = 'intent://s.shopee.co.id/10rXBsLHZl#Intent;scheme=https;package=com.android.chrome;end';
+
+    // Deep link versi intent Android (langsung ke app Shopee)
+    const androidIntent = 'intent://open?deep_and_jump=https%3A%2F%2Fs.shopee.co.id%2F10rXBsLHZl#Intent;scheme=shopee;package=com.shopee.id;end';
+
+    // Fallback universal link
+    const fallbackLink = affiliateLink;
 
     const showAlert = () => {
       const alertBox = document.getElementById('alert');
@@ -39,12 +45,12 @@
 
       if (isAndroid) {
         btnContainer.innerHTML = `
-          <a href="${chromeIntent}" class="block w-full bg-blue-600 text-white py-2 rounded-lg">Buka di Chrome</a>
+          <a href="${androidIntent}" class="block w-full bg-blue-600 text-white py-2 rounded-lg">Buka di Chrome</a>
         `;
       } else if (isIOS) {
         msg.innerText = "Silakan buka halaman ini di Safari untuk melanjutkan. Klik tombol di bawah ini:";
         btnContainer.innerHTML = `
-          <a href="${affiliateLink}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>
+          <a href="${fallbackLink}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>
         `;
       }
     };
@@ -57,8 +63,13 @@
       window.history.pushState({ step: 1 }, '');
       window.history.pushState({ step: 2 }, '');
 
-      // Redirect ke link affiliate Shopee
-      window.location.href = affiliateLink;
+      // Redirect ke aplikasi Shopee
+      if (isAndroid) {
+        window.location.href = androidIntent;
+      } else {
+        // iOS fallback ke link biasa
+        window.location.href = fallbackLink;
+      }
     }
 
     // Tangani tombol back
