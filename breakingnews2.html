@@ -20,7 +20,6 @@
     </style>
 </head>
 <body>
-
     <p>Silakan buka di browser utama Anda untuk melihat konten berita.</p>
 
     <div id="inAppBrowserModal" class="modal-overlay">
@@ -33,52 +32,47 @@
 
     <script>
         // --- PENGATURAN UTAMA ---
-        const linkShopee = "https://shopee.co.id/mall";
+        const linkShopeeApp = "shopee://mall"; // Deep link untuk buka aplikasi
+        const linkShopeeWeb = "https://shopee.co.id/mall"; // Link web sebagai fallback
         const linkTujuanAkhir = "https://www.kompas.tv";
         // -------------------------
 
-        // Fungsi untuk mendeteksi browser dari aplikasi sosial media
         const isSocialMediaBrowser = () => {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             return /instagram|fbav|fban|threads|tiktok/i.test(ua);
         };
 
-        // =======================================================
-        // INTI LOGIKA
-        // =======================================================
         if (isSocialMediaBrowser()) {
-            // **TAHAP 1: Pengguna ada di Browser Media Sosial**
-            
-            // Tampilkan pesan awal dan notifikasi
+            // TAHAP 1: Pengguna ada di Browser Media Sosial
             document.body.innerHTML = '<p>Silakan buka di browser utama Anda untuk melihat konten berita.</p>';
             const modal = document.getElementById('inAppBrowserModal');
             modal.style.display = 'flex';
 
-            // Siapkan tombol untuk membuka link ini di browser eksternal
             const openButton = document.getElementById('openInBrowser');
             openButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                // Link yang dituju adalah halaman ini sendiri
                 const urlHalamanIni = window.location.href;
-                
-                // Gunakan intent untuk memaksa buka di Chrome (untuk Android)
                 const intentUrl = `intent:${urlHalamanIni.replace(/https?:\/\//, "")}#Intent;scheme=https;package=com.android.chrome;end`;
                 window.location.href = intentUrl;
             });
 
         } else {
-            // **TAHAP 2 & 3: Pengguna sudah di Browser Asli (Chrome/Safari)**
-            
-            // Tampilkan pesan loading singkat
-            document.body.innerHTML = "<p>Mengalihkan Anda...</p>";
+            // TAHAP 2 & 3: Pengguna sudah di Browser Asli
+            document.body.innerHTML = "<p>Membuka Shopee...</p>";
 
-            // Langkah A: Ganti URL di riwayat browser dengan tujuan akhir (Kompas.tv)
+            // Ganti history dengan tujuan akhir
             history.replaceState(null, '', linkTujuanAkhir);
             
-            // Langkah B: Langsung alihkan pengguna ke Shopee
-            window.location.href = linkShopee;
+            // **PERBAIKAN DIMULAI DI SINI**
+            // Coba buka aplikasi via deep link
+            window.location.href = linkShopeeApp;
+
+            // Atur fallback jika aplikasi gagal terbuka setelah 2.5 detik
+            setTimeout(function () {
+                // Jika pengguna masih di halaman ini, alihkan ke website
+                window.location.href = linkShopeeWeb;
+            }, 2500);
         }
     </script>
-
 </body>
 </html>
