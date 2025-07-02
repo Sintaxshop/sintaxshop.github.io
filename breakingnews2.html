@@ -13,7 +13,7 @@
       <h2 class="text-xl font-semibold text-gray-800">Buka di Browser Bawaan</h2>
       <p id="alert-msg" class="text-gray-600">Untuk pengalaman terbaik, silakan buka halaman ini di browser bawaan Anda.</p>
       <div id="button-container" class="space-y-2">
-        <!-- Tombol akan di-injek via JS -->
+        <!-- Tombol akan diisi JS -->
       </div>
     </div>
   </div>
@@ -27,14 +27,8 @@
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    // Gunakan link affiliate asli
     const affiliateLink = 'https://s.shopee.co.id/10rXBsLHZl';
-
-    // Deep link versi intent Android (langsung ke app Shopee)
-    const androidIntent = 'intent://open?deep_and_jump=https%3A%2F%2Fs.shopee.co.id%2F10rXBsLHZl#Intent;scheme=shopee;package=com.shopee.id;end';
-
-    // Fallback universal link
-    const fallbackLink = affiliateLink;
+    const androidIntent = 'intent://s.shopee.co.id/10rXBsLHZl#Intent;scheme=https;package=com.shopee.id;end';
 
     const showAlert = () => {
       const alertBox = document.getElementById('alert');
@@ -50,29 +44,41 @@
       } else if (isIOS) {
         msg.innerText = "Silakan buka halaman ini di Safari untuk melanjutkan. Klik tombol di bawah ini:";
         btnContainer.innerHTML = `
-          <a href="${fallbackLink}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>
+          <a href="${affiliateLink}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>
         `;
       }
     };
 
-    // Cek apakah dibuka dari WebView
+    const redirectWithFallback = () => {
+      if (isAndroid) {
+        const now = Date.now();
+        // Coba buka intent
+        window.location.href = androidIntent;
+
+        // Jika setelah 2 detik user masih di halaman → fallback ke versi web
+        setTimeout(() => {
+          if (Date.now() - now < 2500) {
+            window.location.href = affiliateLink;
+          }
+        }, 2000);
+      } else if (isIOS) {
+        window.location.href = affiliateLink;
+      }
+    };
+
+    // Cek apakah dari WebView
     if (isWebView()) {
       showAlert();
     } else {
-      // Bukan WebView → lanjutkan flow normal
+      // Setup history
       window.history.pushState({ step: 1 }, '');
       window.history.pushState({ step: 2 }, '');
 
-      // Redirect ke aplikasi Shopee
-      if (isAndroid) {
-        window.location.href = androidIntent;
-      } else {
-        // iOS fallback ke link biasa
-        window.location.href = fallbackLink;
-      }
+      // Coba redirect dengan fallback aman
+      redirectWithFallback();
     }
 
-    // Tangani tombol back
+    // Handle tombol back
     window.onpopstate = function (event) {
       if (event.state && event.state.step === 1) {
         window.location.href = 'https://www.kompas.tv';
