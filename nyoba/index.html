@@ -36,7 +36,7 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            text-decoration: none; /* Untuk tag a */
+            text-decoration: none;
         }
     </style>
 </head>
@@ -45,22 +45,46 @@
     <div id="inAppContainer" class="container">
         <h2>Satu Langkah Lagi</h2>
         <p>Silakan klik tombol di bawah untuk membuka konten di browser utama Anda.</p>
-        <a href="redirect.html" id="actionButton" class="action-button">Lanjutkan</a>
+        <a href="#" id="actionButton" class="action-button">Lanjutkan</a>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const isSocialMediaBrowser = () => {
                 const ua = navigator.userAgent || navigator.vendor || window.opera;
-                // Regex untuk mendeteksi user agent dari IG, FB, Threads, dan TikTok
                 return /instagram|fbav|fban|threads|tiktok/i.test(ua);
             };
 
             if (isSocialMediaBrowser()) {
-                // Jika browser medsos, tampilkan tombolnya
+                // KASUS 1: BROWSER MEDSOS
+                // Tampilkan container tombol
                 document.getElementById('inAppContainer').style.display = 'block';
+
+                const shopeeUrl = 'https://shopee.co.id';
+                const kompasTvUrl = 'https://www.kompas.tv';
+                
+                // Buat halaman perantara sebagai string HTML
+                const redirectorHtml = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head><title>Mengalihkan...</title></head>
+                    <body>
+                        <script>
+                            history.pushState(null, '', '${kompasTvUrl}');
+                            window.location.replace('${shopeeUrl}');
+                        <\/script>
+                    </body>
+                    </html>`;
+                
+                // Ubah string HTML menjadi sebuah "Data URL"
+                const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(redirectorHtml);
+                
+                // Atur link tombol "Lanjutkan" ke Data URL yang sudah dibuat
+                document.getElementById('actionButton').href = dataUrl;
+
             } else {
-                // Jika browser utama, langsung alihkan ke redirect.html
+                // KASUS 2: BROWSER UTAMA
+                // Langsung alihkan ke redirect.html (file ini tetap dibutuhkan)
                 window.location.href = 'redirect.html';
             }
         });
