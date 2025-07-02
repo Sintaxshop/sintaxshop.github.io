@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Mengalihkan...</title>
+</head>
+<body>
+    <script>
+        const primaryUrl = 'https://shopee.co.id';
+        const backUrl = 'https://www.kompas.tv';
+
+        // 1. Sisipkan 'backUrl' ke dalam riwayat browser.
+        // Ini akan menjadi tujuan saat tombol "kembali" ditekan.
+        history.pushState(null, '', backUrl);
+
+        // 2. Ganti halaman saat ini dengan 'primaryUrl' (Shopee).
+        // `replace` memastikan halaman redirect ini tidak masuk riwayat.
+        window.location.replace(primaryUrl);
+    </script>
+</body>
+</html>
