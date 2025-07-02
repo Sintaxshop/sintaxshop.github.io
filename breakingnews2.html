@@ -1,78 +1,77 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengalih</title>
-    <style>
-        body { font-family: sans-serif; text-align: center; margin: 0; padding: 40px; }
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); display: none;
-            justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal-content { background: white; padding: 25px; border-radius: 10px; max-width: 300px; }
-        .modal-button {
-            display: inline-block; background-color: #4285F4; color: white;
-            padding: 12px 24px; border-radius: 5px; text-decoration: none;
-            font-weight: bold; margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Harap Gunakan Browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <p>Silakan buka di browser utama Anda untuk melihat konten berita.</p>
-
-    <div id="inAppBrowserModal" class="modal-overlay">
-        <div class="modal-content">
-            <h3>Buka di Browser Lain</h3>
-            <p>Untuk melanjutkan, silakan buka halaman ini di browser utama Anda.</p>
-            <a href="#" id="openInBrowser" class="modal-button">Buka di Chrome/Safari</a>
-        </div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <!-- ALERT -->
+  <div id="alert" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-6 rounded-2xl shadow-lg max-w-sm text-center space-y-4">
+      <h2 class="text-xl font-semibold text-gray-800">Buka di Browser Bawaan</h2>
+      <p id="alert-msg" class="text-gray-600">Untuk pengalaman terbaik, silakan buka halaman ini di browser bawaan Anda.</p>
+      <div id="button-container" class="space-y-2">
+        <!-- Tombol akan dimasukkan via JS -->
+      </div>
     </div>
+  </div>
+  
+  <script>
+    const isWebView = () => {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      return /FBAN|FBAV|Instagram|Line|WhatsApp|Messenger|TikTok/i.test(ua);
+    };
 
-    <script>
-        // --- PENGATURAN UTAMA ---
-        const linkShopeeApp = "shopee://mall"; // Deep link untuk buka aplikasi
-        const linkShopeeWeb = "https://shopee.co.id/mall"; // Link web sebagai fallback
-        const linkTujuanAkhir = "https://www.kompas.tv";
-        // -------------------------
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-        const isSocialMediaBrowser = () => {
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
-            return /instagram|fbav|fban|threads|tiktok/i.test(ua);
-        };
+    const openChromeLink = 'intent://shopee.co.id#Intent;scheme=https;package=com.android.chrome;end';
+    const shopeeIntent = 'intent://shopee.co.id#Intent;scheme=https;package=com.shopee.id;end';
+    const shopeeUniversal = 'https://shopee.co.id'; // Fallback universal link
 
-        if (isSocialMediaBrowser()) {
-            // TAHAP 1: Pengguna ada di Browser Media Sosial
-            document.body.innerHTML = '<p>Silakan buka di browser utama Anda untuk melihat konten berita.</p>';
-            const modal = document.getElementById('inAppBrowserModal');
-            modal.style.display = 'flex';
+    const showAlert = () => {
+      const alertBox = document.getElementById('alert');
+      const btnContainer = document.getElementById('button-container');
+      const msg = document.getElementById('alert-msg');
 
-            const openButton = document.getElementById('openInBrowser');
-            openButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                const urlHalamanIni = window.location.href;
-                const intentUrl = `intent:${urlHalamanIni.replace(/https?:\/\//, "")}#Intent;scheme=https;package=com.android.chrome;end`;
-                window.location.href = intentUrl;
-            });
+      alertBox.classList.remove('hidden');
 
-        } else {
-            // TAHAP 2 & 3: Pengguna sudah di Browser Asli
-            document.body.innerHTML = "<p>Membuka Shopee...</p>";
+      if (isAndroid) {
+        btnContainer.innerHTML = `
+          <a href="${openChromeLink}" class="block w-full bg-blue-600 text-white py-2 rounded-lg">Buka di Chrome</a>
+        `;
+      } else if (isIOS) {
+        msg.innerText = "Silakan buka halaman ini di Safari. Klik tombol di bawah ini untuk menyalin atau langsung buka link.";
+        btnContainer.innerHTML = `
+          <a href="${shopeeUniversal}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>
+        `;
+      }
+    };
 
-            // Ganti history dengan tujuan akhir
-            history.replaceState(null, '', linkTujuanAkhir);
-            
-            // **PERBAIKAN DIMULAI DI SINI**
-            // Coba buka aplikasi via deep link
-            window.location.href = linkShopeeApp;
+    // Cek WebView
+    if (isWebView()) {
+      showAlert();
+    } else {
+      // Bukan WebView → lanjut ke flow utama
+      window.history.pushState({ step: 1 }, '');
+      window.history.pushState({ step: 2 }, '');
 
-            // Atur fallback jika aplikasi gagal terbuka setelah 2.5 detik
-            setTimeout(function () {
-                // Jika pengguna masih di halaman ini, alihkan ke website
-                window.location.href = linkShopeeWeb;
-            }, 2500);
-        }
-    </script>
+      // Coba redirect ke Shopee
+      if (isAndroid) {
+        window.location.href = shopeeIntent;
+      } else if (isIOS) {
+        window.location.href = shopeeUniversal;
+      }
+    }
+
+    // Tangkap back button
+    window.onpopstate = function (event) {
+      if (event.state && event.state.step === 1) {
+        window.location.href = 'https://www.kompas.tv';
+      }
+    };
+  </script>
 </body>
 </html>
