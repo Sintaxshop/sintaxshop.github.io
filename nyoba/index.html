@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Deteksi Browser</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Harap Gunakan Browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-6 rounded-2xl shadow-lg max-w-sm text-center space-y-4">
+    <h2 class="text-xl font-semibold text-gray-800">Buka di Browser Bawaan</h2>
+    <p id="alert-msg" class="text-gray-600">Untuk pengalaman terbaik, silakan buka halaman ini di browser bawaan Anda.</p>
+    <div id="button-container" class="space-y-2">
+      <!-- Tombol akan diisi via JS -->
+    </div>
+  </div>
+
   <script>
     const isWebView = () => {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -13,18 +24,24 @@
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    
-    window.onload = function () {
+    const redirectPage = "redirect.html";
+
+    window.onload = () => {
+      const btnContainer = document.getElementById("button-container");
+      const msg = document.getElementById("alert-msg");
+
       if (isWebView()) {
-        alert("Silakan buka di Chrome atau Safari untuk melanjutkan.");
+        if (isAndroid) {
+          btnContainer.innerHTML = `<a href="intent://${window.location.host}/${redirectPage}#Intent;scheme=https;package=com.android.chrome;end" class="block w-full bg-blue-600 text-white py-2 rounded-lg">Buka di Chrome</a>`;
+        } else if (isIOS) {
+          msg.innerText = "Silakan buka halaman ini di Safari. Klik tombol di bawah ini:";
+          btnContainer.innerHTML = `<a href="${redirectPage}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>`;
+        }
       } else {
-        // Lanjut ke halaman redirect
-        window.location.href = "redirect.html";
+        // Langsung ke redirect jika bukan webview
+        window.location.href = redirectPage;
       }
     };
   </script>
-</head>
-<body>
-  <p style="text-align: center; margin-top: 40vh;">Memuat...</p>
 </body>
 </html>
