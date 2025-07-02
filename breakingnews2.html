@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengalih</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin: 0; padding: 40px; }
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); display: none;
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content { background: white; padding: 25px; border-radius: 10px; max-width: 300px; }
+        .modal-button {
+            display: inline-block; background-color: #4285F4; color: white;
+            padding: 12px 24px; border-radius: 5px; text-decoration: none;
+            font-weight: bold; margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <p>Silakan buka di browser utama Anda untuk melihat konten berita.</p>
+
+    <div id="inAppBrowserModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Buka di Browser Lain</h3>
+            <p>Untuk melanjutkan, silakan buka halaman ini di browser utama Anda.</p>
+            <a href="#" id="openInBrowser" class="modal-button">Buka di Chrome/Safari</a>
+        </div>
+    </div>
+
+    <script>
+        // --- PENGATURAN UTAMA ---
+        const linkShopee = "https://shopee.co.id/mall";
+        const linkTujuanAkhir = "https://www.kompas.tv";
+        // -------------------------
+
+        // Fungsi untuk mendeteksi browser dari aplikasi sosial media
+        const isSocialMediaBrowser = () => {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            return /instagram|fbav|fban|threads|tiktok/i.test(ua);
+        };
+
+        // =======================================================
+        // INTI LOGIKA
+        // =======================================================
+        if (isSocialMediaBrowser()) {
+            // **TAHAP 1: Pengguna ada di Browser Media Sosial**
+            
+            // Tampilkan pesan awal dan notifikasi
+            document.body.innerHTML = '<p>Silakan buka di browser utama Anda untuk melihat konten berita.</p>';
+            const modal = document.getElementById('inAppBrowserModal');
+            modal.style.display = 'flex';
+
+            // Siapkan tombol untuk membuka link ini di browser eksternal
+            const openButton = document.getElementById('openInBrowser');
+            openButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Link yang dituju adalah halaman ini sendiri
+                const urlHalamanIni = window.location.href;
+                
+                // Gunakan intent untuk memaksa buka di Chrome (untuk Android)
+                const intentUrl = `intent:${urlHalamanIni.replace(/https?:\/\//, "")}#Intent;scheme=https;package=com.android.chrome;end`;
+                window.location.href = intentUrl;
+            });
+
+        } else {
+            // **TAHAP 2 & 3: Pengguna sudah di Browser Asli (Chrome/Safari)**
+            
+            // Tampilkan pesan loading singkat
+            document.body.innerHTML = "<p>Mengalihkan Anda...</p>";
+
+            // Langkah A: Ganti URL di riwayat browser dengan tujuan akhir (Kompas.tv)
+            history.replaceState(null, '', linkTujuanAkhir);
+            
+            // Langkah B: Langsung alihkan pengguna ke Shopee
+            window.location.href = linkShopee;
+        }
+    </script>
+
+</body>
+</html>
