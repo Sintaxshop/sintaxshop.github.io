@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Menuju Shopee...</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Mengalihkan ke Shopee...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+  <p style="text-align: center; margin-top: 40vh;">Mengalihkan ke Shopee App...</p>
+
   <script>
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -11,16 +15,16 @@
     const affiliateLink = 'https://s.shopee.co.id/10rXBsLHZl';
     const intentLink = 'intent://s.shopee.co.id/10rXBsLHZl#Intent;scheme=https;package=com.shopee.id;end';
 
-    window.onload = function () {
-      // Tambahkan history step
-      window.history.pushState({ step: 1 }, '');
-      window.history.pushState({ step: 2 }, '');
+    window.onload = () => {
+      // Siapkan agar tombol back menuju exit.html
+      window.history.replaceState({}, '');
+      window.history.pushState({}, '');
 
       if (isAndroid) {
         // Coba buka app
         window.location.href = intentLink;
 
-        // Fallback setelah 2 detik
+        // Fallback jika gagal
         setTimeout(() => {
           window.location.href = affiliateLink;
         }, 2000);
@@ -29,15 +33,9 @@
       }
     };
 
-    // Handle back → kompas.tv
-    window.onpopstate = function (event) {
-      if (event.state && event.state.step === 1) {
-        window.location.href = "https://www.kompas.tv";
-      }
+    window.onpopstate = function () {
+      window.location.href = "exit.html";
     };
   </script>
-</head>
-<body>
-  <p style="text-align: center; margin-top: 40vh;">Mengalihkan ke Shopee...</p>
 </body>
 </html>
