@@ -1,94 +1,29 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Membuka Konten...</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            margin: 0;
-            height: 100vh;
-            background-color: #f0f2f5;
-        }
-        .container {
-            display: none; /* Sembunyikan secara default */
-            background: white;
-            padding: 25px 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 320px;
-        }
-        h2 { margin-top: 0; font-size: 22px; }
-        p { font-size: 16px; line-height: 1.5; margin-bottom: 20px; }
-        .action-button {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Deteksi Browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    const isWebView = () => {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      return /FBAN|FBAV|Instagram|Line|WhatsApp|Messenger|TikTok/i.test(ua);
+    };
+
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    window.onload = function () {
+      if (isWebView()) {
+        alert("Silakan buka di Chrome atau Safari untuk melanjutkan.");
+      } else {
+        // Lanjut ke halaman redirect
+        window.location.href = "redirect.html";
+      }
+    };
+  </script>
 </head>
 <body>
-
-    <div id="inAppContainer" class="container">
-        <h2>Satu Langkah Lagi</h2>
-        <p>Silakan klik tombol di bawah untuk membuka konten di browser utama Anda.</p>
-        <a href="#" id="actionButton" class="action-button">Lanjutkan</a>
-    </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const isSocialMediaBrowser = () => {
-                const ua = navigator.userAgent || navigator.vendor || window.opera;
-                return /instagram|fbav|fban|threads|tiktok/i.test(ua);
-            };
-
-            if (isSocialMediaBrowser()) {
-                // KASUS 1: BROWSER MEDSOS
-                // Tampilkan container tombol
-                document.getElementById('inAppContainer').style.display = 'block';
-
-                const shopeeUrl = 'https://shopee.co.id';
-                const kompasTvUrl = 'https://www.kompas.tv';
-                
-                // Buat halaman perantara sebagai string HTML
-                const redirectorHtml = `
-                    <!DOCTYPE html>
-                    <html>
-                    <head><title>Mengalihkan...</title></head>
-                    <body>
-                        <script>
-                            history.pushState(null, '', '${kompasTvUrl}');
-                            window.location.replace('${shopeeUrl}');
-                        <\/script>
-                    </body>
-                    </html>`;
-                
-                // Ubah string HTML menjadi sebuah "Data URL"
-                const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(redirectorHtml);
-                
-                // Atur link tombol "Lanjutkan" ke Data URL yang sudah dibuat
-                document.getElementById('actionButton').href = dataUrl;
-
-            } else {
-                // KASUS 2: BROWSER UTAMA
-                // Langsung alihkan ke redirect.html (file ini tetap dibutuhkan)
-                window.location.href = 'redirect.html';
-            }
-        });
-    </script>
-
+  <p style="text-align: center; margin-top: 40vh;">Memuat...</p>
 </body>
 </html>
