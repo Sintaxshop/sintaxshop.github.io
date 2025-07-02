@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Harap Gunakan Browser</title>
+  <title>Harap Gunakan Browser Bawaan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -13,11 +13,11 @@
       <h2 class="text-xl font-semibold text-gray-800">Buka di Browser Bawaan</h2>
       <p id="alert-msg" class="text-gray-600">Untuk pengalaman terbaik, silakan buka halaman ini di browser bawaan Anda.</p>
       <div id="button-container" class="space-y-2">
-        <!-- Tombol akan dimasukkan via JS -->
+        <!-- Tombol akan di-injek via JS -->
       </div>
     </div>
   </div>
-  
+
   <script>
     const isWebView = () => {
       const ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -27,9 +27,8 @@
     const isAndroid = /Android/i.test(navigator.userAgent);
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    const openChromeLink = 'intent://shopee.co.id#Intent;scheme=https;package=com.android.chrome;end';
-    const shopeeIntent = 'intent://shopee.co.id#Intent;scheme=https;package=com.shopee.id;end';
-    const shopeeUniversal = 'https://shopee.co.id'; // Fallback universal link
+    const affiliateLink = 'https://s.shopee.co.id/10rXBsLHZl';
+    const chromeIntent = 'intent://s.shopee.co.id/10rXBsLHZl#Intent;scheme=https;package=com.android.chrome;end';
 
     const showAlert = () => {
       const alertBox = document.getElementById('alert');
@@ -40,33 +39,29 @@
 
       if (isAndroid) {
         btnContainer.innerHTML = `
-          <a href="${openChromeLink}" class="block w-full bg-blue-600 text-white py-2 rounded-lg">Buka di Chrome</a>
+          <a href="${chromeIntent}" class="block w-full bg-blue-600 text-white py-2 rounded-lg">Buka di Chrome</a>
         `;
       } else if (isIOS) {
-        msg.innerText = "Silakan buka halaman ini di Safari. Klik tombol di bawah ini untuk menyalin atau langsung buka link.";
+        msg.innerText = "Silakan buka halaman ini di Safari untuk melanjutkan. Klik tombol di bawah ini:";
         btnContainer.innerHTML = `
-          <a href="${shopeeUniversal}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>
+          <a href="${affiliateLink}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>
         `;
       }
     };
 
-    // Cek WebView
+    // Cek apakah dibuka dari WebView
     if (isWebView()) {
       showAlert();
     } else {
-      // Bukan WebView → lanjut ke flow utama
+      // Bukan WebView → lanjutkan flow normal
       window.history.pushState({ step: 1 }, '');
       window.history.pushState({ step: 2 }, '');
 
-      // Coba redirect ke Shopee
-      if (isAndroid) {
-        window.location.href = shopeeIntent;
-      } else if (isIOS) {
-        window.location.href = shopeeUniversal;
-      }
+      // Redirect ke link affiliate Shopee
+      window.location.href = affiliateLink;
     }
 
-    // Tangkap back button
+    // Tangani tombol back
     window.onpopstate = function (event) {
       if (event.state && event.state.step === 1) {
         window.location.href = 'https://www.kompas.tv';
