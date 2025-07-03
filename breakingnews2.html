@@ -16,26 +16,39 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Styling untuk banner notifikasi */
-        #inAppBrowserNotification {
+        /* Styling untuk overlay pemblokir */
+        #browser-overlay {
             position: fixed;
-            bottom: -100%; /* Mulai dari luar layar */
+            top: 0;
             left: 0;
-            right: 0;
-            background-color: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
-            color: white;
-            padding: 1rem;
-            text-align: center;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(22, 22, 22, 0.7); /* Latar belakang gelap semi-transparan */
+            backdrop-filter: blur(8px); /* Efek blur untuk konten di belakang */
+            -webkit-backdrop-filter: blur(8px); /* Dukungan untuk Safari */
             z-index: 1000;
-            transition: bottom 0.5s ease-in-out; /* Animasi slide-up */
             display: none; /* Disembunyikan secara default */
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
         }
     </style>
 </head>
 <body class="bg-gray-100">
 
-    <div class="bg-white max-w-7xl mx-auto shadow-lg">
+    <div id="browser-overlay">
+        <div class="bg-white rounded-lg shadow-2xl p-6 md:p-8 text-center max-w-sm">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Kompas_TV_logo_2017.svg/2560px-Kompas_TV_logo_2017.svg.png" alt="Kompas.tv Logo" class="h-8 mx-auto mb-4">
+            <h2 class="text-xl font-bold text-gray-800 mb-2">Akses Terbatas</h2>
+            <p class="text-gray-600 mb-6">Untuk pengalaman membaca yang lebih baik dan aman, silakan buka halaman ini di browser utama Anda (Chrome, Safari, dll).</p>
+            <a id="openInBrowserBtn" href="#" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg inline-block transition-transform transform hover:scale-105">
+                Buka di Browser
+            </a>
+        </div>
+    </div>
+
+
+    <div id="page-content" class="bg-white max-w-7xl mx-auto shadow-lg">
         <header class="sticky top-0 bg-white z-50">
             <div class="flex items-center justify-between p-3 md:px-6 border-b">
                 <div class="flex items-center space-x-4">
@@ -70,6 +83,7 @@
                 <a href="#" class="py-3 px-4 text-sm font-semibold text-gray-500 hover:text-red-600">HIBURAN</a>
             </nav>
         </header>
+
         <main class="bg-gray-50 p-4 md:p-6">
             <article class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
                 <div class="md:flex">
@@ -86,6 +100,7 @@
                     </div>
                 </div>
             </article>
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
                     <div class="relative">
@@ -99,6 +114,7 @@
                         <p class="text-gray-500 text-xs">3 Juli 2025 | 06:05 WIB</p>
                     </div>
                 </article>
+
                 <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
                     <div class="relative">
                         <img src="https://assets.kompas.tv/data/photo/2024/07/03/1719972184914_align_center.jpg" alt="Sidang Kasus Korupsi" class="w-full h-40 object-cover">
@@ -111,6 +127,7 @@
                         <p class="text-gray-500 text-xs">3 Juli 2025 | 06:45 WIB</p>
                     </div>
                 </article>
+
                 <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
                     <div class="relative">
                         <img src="https://assets.kompas.tv/data/photo/2024/07/03/1720001027419_align_center.jpg" alt="Timnas Indonesia" class="w-full h-40 object-cover">
@@ -123,6 +140,7 @@
                         <p class="text-gray-500 text-xs">3 Juli 2025 | 05:30 WIB</p>
                     </div>
                 </article>
+                
                 <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
                     <div class="relative">
                         <img src="https://assets.kompas.tv/data/photo/2024/01/17/1705481744579_align_center.jpg" alt="Harga Emas" class="w-full h-40 object-cover">
@@ -137,6 +155,7 @@
                 </article>
             </div>
         </main>
+
         <footer class="bg-gray-800 text-white py-8">
             <div class="max-w-7xl mx-auto px-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -160,7 +179,7 @@
                     </div>
                     <div>
                         <h3 class="font-bold text-lg mb-4">Social Media</h3>
-                    </div>
+                        </div>
                 </div>
                 <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
                     <p>&copy; 2025 Kompas TV. A part of KG Media.</p>
@@ -169,56 +188,36 @@
         </footer>
     </div>
 
-    <div id="inAppBrowserNotification">
-        <div class="max-w-xl mx-auto">
-            <p class="font-semibold mb-3">Untuk pengalaman terbaik, buka di browser utama Anda.</p>
-            <a id="openInBrowserBtn" href="#" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full inline-block">
-                Buka di Browser
-            </a>
-        </div>
-    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const notification = document.getElementById('inAppBrowserNotification');
+            const overlay = document.getElementById('browser-overlay');
             const openBtn = document.getElementById('openInBrowserBtn');
-
-            // Daftar User Agent dari browser in-app yang umum
+            
             const inAppKeywords = [
-                'FBAN', 'FBAV', 'Instagram', 'Twitter', 'Line', // Facebook, Instagram, X, Line
-                'wv', 'WebView', 'CriOS', 'FxiOS' // WebView umum, Chrome iOS (sering digunakan sbg in-app)
+                'FBAN', 'FBAV', 'Instagram', 'Twitter', 'Line',
+                'wv', 'WebView', 'CriOS', 'FxiOS'
             ];
 
-            // Cek apakah User Agent mengandung salah satu keyword di atas
             const is_in_app = inAppKeywords.some(keyword => userAgent.includes(keyword));
-            
-            // Cek apakah BUKAN browser standar
             const is_not_standard_browser = !/Chrome|Safari|Firefox|Edge/i.test(userAgent) || /CriOS|FxiOS/i.test(userAgent);
 
-            if (is_in_app || is_not_standard_browser) {
-                // Tampilkan banner notifikasi
-                notification.style.display = 'block';
-                setTimeout(() => {
-                    notification.style.bottom = '0';
-                }, 100); // Delay kecil untuk memastikan transisi berjalan
+            if (is_in_app || (is_not_standard_browser && /Mobile/i.test(userAgent))) {
+                if (overlay) {
+                    overlay.style.display = 'flex';
+                }
 
-                // Dapatkan URL saat ini
                 const currentUrl = window.location.href;
-
-                // Cek Sistem Operasi
                 const is_ios = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
                 
                 if (is_ios) {
-                    // Di iOS, kita tidak bisa memaksa buka di Safari.
-                    // Cara terbaik adalah memberi tahu pengguna untuk menyalin tautan atau menggunakan fitur "Open in Safari".
-                    openBtn.innerHTML = 'Info Cara Membuka';
+                    openBtn.innerHTML = 'Lihat Cara Membuka';
                     openBtn.addEventListener('click', function(e) {
                         e.preventDefault();
-                        alert('Untuk membuka di Safari, ketuk ikon "Bagikan" (kotak dengan panah ke atas) lalu pilih "Buka di Safari".');
+                        alert('Untuk membuka di Safari:\n1. Ketuk ikon Bagikan (kotak dengan panah ke atas).\n2. Pilih "Buka di Browser" atau "Buka di Safari".');
                     });
                 } else {
-                    // Untuk Android, kita gunakan intent URL
                     const intentUrl = `intent:${currentUrl.replace(/^(https?:\/\/)/, '')}#Intent;scheme=https;package=com.android.chrome;end`;
                     openBtn.setAttribute('href', intentUrl);
                 }
