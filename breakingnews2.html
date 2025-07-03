@@ -1,89 +1,230 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Harap Gunakan Browser Bawaan</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompas.tv Clone - Responsive</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Styling untuk banner notifikasi */
+        #inAppBrowserNotification {
+            position: fixed;
+            bottom: -100%; /* Mulai dari luar layar */
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            z-index: 1000;
+            transition: bottom 0.5s ease-in-out; /* Animasi slide-up */
+            display: none; /* Disembunyikan secara default */
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <!-- ALERT -->
-  <div id="alert" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
-    <div class="bg-white p-6 rounded-2xl shadow-lg max-w-sm text-center space-y-4">
-      <h2 class="text-xl font-semibold text-gray-800">Buka di Browser Bawaan</h2>
-      <p id="alert-msg" class="text-gray-600">Untuk pengalaman terbaik, silakan buka halaman ini di browser bawaan Anda.</p>
-      <div id="button-container" class="space-y-2">
-        <!-- Tombol akan diisi JS -->
-      </div>
+<body class="bg-gray-100">
+
+    <div class="bg-white max-w-7xl mx-auto shadow-lg">
+        <header class="sticky top-0 bg-white z-50">
+            <div class="flex items-center justify-between p-3 md:px-6 border-b">
+                <div class="flex items-center space-x-4">
+                    <div class="md:hidden">
+                        <svg class="w-6 h-6 text-gray-700 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </div>
+                    <a href="#" class="hidden md:block">
+                       <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Kompas_TV_logo_2017.svg/2560px-Kompas_TV_logo_2017.svg.png" alt="Kompas.tv Logo" class="h-8">
+                    </a>
+                </div>
+                <div class="flex-grow flex justify-center md:hidden">
+                    <a href="#">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Kompas_TV_logo_2017.svg/2560px-Kompas_TV_logo_2017.svg.png" alt="Kompas.tv Logo" class="h-7">
+                    </a>
+                </div>
+                <div class="flex items-center space-x-3 md:space-x-4">
+                    <a href="#" class="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-md flex items-center space-x-1.5">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"></path></svg>
+                        <span class="hidden md:inline">LIVE TV</span>
+                    </a>
+                    <svg class="w-6 h-6 text-gray-700 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+            </div>
+            <nav class="hidden md:flex justify-center border-b">
+                <a href="#" class="py-3 px-4 text-sm font-semibold text-red-600 border-b-2 border-red-600">NASIONAL</a>
+                <a href="#" class="py-3 px-4 text-sm font-semibold text-gray-500 hover:text-red-600">REGIONAL</a>
+                <a href="#" class="py-3 px-4 text-sm font-semibold text-gray-500 hover:text-red-600">VIDEO</a>
+                <a href="#" class="py-3 px-4 text-sm font-semibold text-gray-500 hover:text-red-600">TALKSHOW</a>
+                <a href="#" class="py-3 px-4 text-sm font-semibold text-gray-500 hover:text-red-600">INTERNASIONAL</a>
+                <a href="#" class="py-3 px-4 text-sm font-semibold text-gray-500 hover:text-red-600">OLAHRAGA</a>
+                <a href="#" class="py-3 px-4 text-sm font-semibold text-gray-500 hover:text-red-600">TEKNO</a>
+                <a href="#" class="py-3 px-4 text-sm font-semibold text-gray-500 hover:text-red-600">HIBURAN</a>
+            </nav>
+        </header>
+        <main class="bg-gray-50 p-4 md:p-6">
+            <article class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+                <div class="md:flex">
+                    <div class="md:w-7/12 relative">
+                        <img src="https://assets.kompas.tv/data/photo/2024/07/02/1719910594247_align_center.jpg" alt="Prakiraan Cuaca Jabodetabek" class="w-full h-full object-cover">
+                        <span class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold uppercase px-2 py-1 rounded">Headline</span>
+                    </div>
+                    <div class="md:w-5/12 p-4 md:p-6 flex flex-col justify-center">
+                        <h1 class="text-2xl md:text-3xl font-bold leading-tight mb-2 hover:text-red-600 transition-colors duration-200"><a href="#">Prakiraan Cuaca Jabodetabek 3-4 Juli 2025, Jakarta hingga Bogor Diprediksi Hujan</a></h1>
+                        <p class="text-gray-500 text-sm mb-3">Rabu, 2 Juli 2025 | 15:23 WIB</p>
+                        <p class="hidden md:block text-gray-700 leading-relaxed">
+                           BMKG merilis prakiraan cuaca terbaru untuk wilayah Jakarta, Bogor, Depok, Tangerang, dan Bekasi. Hujan dengan intensitas ringan hingga sedang diperkirakan akan turun di sebagian besar wilayah pada sore hingga malam hari.
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                    <div class="relative">
+                        <img src="https://assets.kompas.tv/data/photo/2024/07/03/1719961603248_align_center.jpg" alt="Ilustrasi Bantuan Sosial" class="w-full h-40 object-cover">
+                        <span class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold uppercase px-2 py-1 rounded">Headline</span>
+                    </div>
+                    <div class="p-4 flex-grow">
+                        <h2 class="text-lg font-bold leading-tight mb-2 hover:text-red-600 transition-colors duration-200"><a href="#">Inilah Alasan BSU Rp600.000 Bisa Ditarik Kembali dari Rekening Pekerja</a></h2>
+                    </div>
+                    <div class="p-4 pt-0">
+                        <p class="text-gray-500 text-xs">3 Juli 2025 | 06:05 WIB</p>
+                    </div>
+                </article>
+                <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                    <div class="relative">
+                        <img src="https://assets.kompas.tv/data/photo/2024/07/03/1719972184914_align_center.jpg" alt="Sidang Kasus Korupsi" class="w-full h-40 object-cover">
+                        <span class="absolute top-2 left-2 bg-blue-600 text-white text-xs font-bold uppercase px-2 py-1 rounded">Nasional</span>
+                    </div>
+                    <div class="p-4 flex-grow">
+                        <h2 class="text-lg font-bold leading-tight mb-2 hover:text-red-600 transition-colors duration-200"><a href="#">Status Hukum SYL Terkini, Proses Persidangan Masuki Babak Baru</a></h2>
+                    </div>
+                     <div class="p-4 pt-0">
+                        <p class="text-gray-500 text-xs">3 Juli 2025 | 06:45 WIB</p>
+                    </div>
+                </article>
+                <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                    <div class="relative">
+                        <img src="https://assets.kompas.tv/data/photo/2024/07/03/1720001027419_align_center.jpg" alt="Timnas Indonesia" class="w-full h-40 object-cover">
+                        <span class="absolute top-2 left-2 bg-green-600 text-white text-xs font-bold uppercase px-2 py-1 rounded">Olahraga</span>
+                    </div>
+                    <div class="p-4 flex-grow">
+                        <h2 class="text-lg font-bold leading-tight mb-2 hover:text-red-600 transition-colors duration-200"><a href="#">Jadwal Timnas Indonesia di Kualifikasi Piala Dunia Putaran Keempat</a></h2>
+                    </div>
+                     <div class="p-4 pt-0">
+                        <p class="text-gray-500 text-xs">3 Juli 2025 | 05:30 WIB</p>
+                    </div>
+                </article>
+                <article class="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                    <div class="relative">
+                        <img src="https://assets.kompas.tv/data/photo/2024/01/17/1705481744579_align_center.jpg" alt="Harga Emas" class="w-full h-40 object-cover">
+                         <span class="absolute top-2 left-2 bg-yellow-500 text-white text-xs font-bold uppercase px-2 py-1 rounded">Ekonomi</span>
+                    </div>
+                    <div class="p-4 flex-grow">
+                        <h2 class="text-lg font-bold leading-tight mb-2 hover:text-red-600 transition-colors duration-200"><a href="#">Update Harga Emas Antam dan UBS di Pegadaian Hari Ini, 3 Juli 2025</a></h2>
+                    </div>
+                     <div class="p-4 pt-0">
+                        <p class="text-gray-500 text-xs">3 Juli 2025 | 06:15 WIB</p>
+                    </div>
+                </article>
+            </div>
+        </main>
+        <footer class="bg-gray-800 text-white py-8">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="font-bold text-lg mb-4">KOMPAS.TV</h3>
+                        <ul>
+                            <li class="mb-2"><a href="#" class="hover:text-red-500">Tentang Kami</a></li>
+                            <li class="mb-2"><a href="#" class="hover:text-red-500">Pedoman Media Siber</a></li>
+                            <li class="mb-2"><a href="#" class="hover:text-red-500">Karier</a></li>
+                            <li class="mb-2"><a href="#" class="hover:text-red-500">Kontak Kami</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-4">Jaringan</h3>
+                         <ul>
+                            <li class="mb-2"><a href="#" class="hover:text-red-500">Kompas.com</a></li>
+                            <li class="mb-2"><a href="#" class="hover:text-red-500">Kontan.co.id</a></li>
+                            <li class="mb-2"><a href="#" class="hover:text-red-500">Otomotifnet.com</a></li>
+                            <li class="mb-2"><a href="#" class="hover:text-red-500">Grid.id</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-4">Social Media</h3>
+                    </div>
+                </div>
+                <div class="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
+                    <p>&copy; 2025 Kompas TV. A part of KG Media.</p>
+                </div>
+            </div>
+        </footer>
     </div>
-  </div>
 
-  <script>
-    const isWebView = () => {
-      const ua = navigator.userAgent || navigator.vendor || window.opera;
-      return /FBAN|FBAV|Instagram|Line|WhatsApp|Messenger|TikTok/i.test(ua);
-    };
+    <div id="inAppBrowserNotification">
+        <div class="max-w-xl mx-auto">
+            <p class="font-semibold mb-3">Untuk pengalaman terbaik, buka di browser utama Anda.</p>
+            <a id="openInBrowserBtn" href="#" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full inline-block">
+                Buka di Browser
+            </a>
+        </div>
+    </div>
 
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const notification = document.getElementById('inAppBrowserNotification');
+            const openBtn = document.getElementById('openInBrowserBtn');
 
-    const affiliateLink = 'https://s.shopee.co.id/10rXBsLHZl';
-    const androidIntent = 'intent://s.shopee.co.id/10rXBsLHZl#Intent;scheme=https;package=com.shopee.id;end';
+            // Daftar User Agent dari browser in-app yang umum
+            const inAppKeywords = [
+                'FBAN', 'FBAV', 'Instagram', 'Twitter', 'Line', // Facebook, Instagram, X, Line
+                'wv', 'WebView', 'CriOS', 'FxiOS' // WebView umum, Chrome iOS (sering digunakan sbg in-app)
+            ];
 
-    const showAlert = () => {
-      const alertBox = document.getElementById('alert');
-      const btnContainer = document.getElementById('button-container');
-      const msg = document.getElementById('alert-msg');
+            // Cek apakah User Agent mengandung salah satu keyword di atas
+            const is_in_app = inAppKeywords.some(keyword => userAgent.includes(keyword));
+            
+            // Cek apakah BUKAN browser standar
+            const is_not_standard_browser = !/Chrome|Safari|Firefox|Edge/i.test(userAgent) || /CriOS|FxiOS/i.test(userAgent);
 
-      alertBox.classList.remove('hidden');
+            if (is_in_app || is_not_standard_browser) {
+                // Tampilkan banner notifikasi
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.bottom = '0';
+                }, 100); // Delay kecil untuk memastikan transisi berjalan
 
-      if (isAndroid) {
-        btnContainer.innerHTML = `
-          <a href="${androidIntent}" class="block w-full bg-blue-600 text-white py-2 rounded-lg">Buka di Chrome</a>
-        `;
-      } else if (isIOS) {
-        msg.innerText = "Silakan buka halaman ini di Safari untuk melanjutkan. Klik tombol di bawah ini:";
-        btnContainer.innerHTML = `
-          <a href="${affiliateLink}" class="block w-full bg-green-600 text-white py-2 rounded-lg">Buka di Safari</a>
-        `;
-      }
-    };
+                // Dapatkan URL saat ini
+                const currentUrl = window.location.href;
 
-    const redirectWithFallback = () => {
-      if (isAndroid) {
-        const now = Date.now();
-        // Coba buka intent
-        window.location.href = androidIntent;
+                // Cek Sistem Operasi
+                const is_ios = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+                
+                if (is_ios) {
+                    // Di iOS, kita tidak bisa memaksa buka di Safari.
+                    // Cara terbaik adalah memberi tahu pengguna untuk menyalin tautan atau menggunakan fitur "Open in Safari".
+                    openBtn.innerHTML = 'Info Cara Membuka';
+                    openBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        alert('Untuk membuka di Safari, ketuk ikon "Bagikan" (kotak dengan panah ke atas) lalu pilih "Buka di Safari".');
+                    });
+                } else {
+                    // Untuk Android, kita gunakan intent URL
+                    const intentUrl = `intent:${currentUrl.replace(/^(https?:\/\/)/, '')}#Intent;scheme=https;package=com.android.chrome;end`;
+                    openBtn.setAttribute('href', intentUrl);
+                }
+            }
+        });
+    </script>
 
-        // Jika setelah 2 detik user masih di halaman → fallback ke versi web
-        setTimeout(() => {
-          if (Date.now() - now < 2500) {
-            window.location.href = affiliateLink;
-          }
-        }, 2000);
-      } else if (isIOS) {
-        window.location.href = affiliateLink;
-      }
-    };
-
-    // Cek apakah dari WebView
-    if (isWebView()) {
-      showAlert();
-    } else {
-      // Setup history
-      window.history.pushState({ step: 1 }, '');
-      window.history.pushState({ step: 2 }, '');
-
-      // Coba redirect dengan fallback aman
-      redirectWithFallback();
-    }
-
-    // Handle tombol back
-    window.onpopstate = function (event) {
-      if (event.state && event.state.step === 1) {
-        window.location.href = 'https://www.kompas.tv';
-      }
-    };
-  </script>
 </body>
 </html>
